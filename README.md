@@ -5,6 +5,8 @@
 
 ---
 
+![중요한 핵심 이미지](https://github.com/dday4881/2026-11-16/blob/main/D-21%20important%20map.png)
+
 ## 🔄 전체 파이프라인 아키텍처 (Collect ~ Retrieve)
 
 ```text
@@ -18,8 +20,6 @@
   └─▶ (07. Index)    pgvector 적재
   └─▶ (08. Retrieve) Top-k 검색 및 위치 반환
 ```
-
-![중요한 핵심 이미지] (https://github.com/dday4881/2026-11-16/blob/main/D-21%20important%20map.png)
 
 ---
 
@@ -44,29 +44,29 @@
 
 ---
 
-## 교시별 핵심 강의 요약 (1교시 ~ 8교시)
+## 핵심 요약
 
-### 1교시 · 전체 흐름 (Collect ~ Retrieve)
+###  전체 흐름 (Collect ~ Retrieve)
 * 원문 파일을 수집하여 파싱·정제·분할·검증 후 임베딩하여 벡터 DB(pgvector)에 적재하는 전체 파이프라인을 연결합니다.
 * 기존에 사용한 E5-small 모델 및 정규화 규칙을 동일하게 유지하며, 내일(20일) 배울 Basic RAG의 Context Builder와 연결됩니다.
 * 검색의 신뢰도는 임베딩 모델뿐만 아니라 입력 문서를 얼마나 정교하게 전처리했는지에 달려 있습니다.
 
-### 2교시 · Document Parsing (형식·구조·원문 위치)
+###  Document Parsing (형식·구조·원문 위치)
 * 파일 형식(TXT, MD, HTML, PDF)별 전용 도구를 활용해 본문과 표, 읽기 순서 등의 구조를 추출하고 원문 위치(`source_locator`)를 기록합니다.
 * 인코딩/디코딩 규칙(UTF-8)을 준수하며, 텍스트가 비어 있는 PDF는 무조건 삭제하지 않고 OCR 필요 여부(`needs_ocr`) 등 원인을 판별합니다.
 
-### 3교시 · Text Cleaning (형식 정리와 의미 보존)
+### Text Cleaning (형식 정리와 의미 보존)
 * 줄바꿈(LF 통일)과 불필요한 공백 등 형식상 잡음을 제거하되, 숫자·부정어·단위·예외 조건 등 핵심 의미는 절대 훼손하지 않습니다.
 * Unicode 정규화 시 기본 본문은 NFC를 적용하고, 의미 변형 우려가 있는 NFKC는 신중히 사용하며 정제 텍스트 기준 해시와 위치를 관리합니다.
 
-### 4교시 · Chunking (Size·Overlap·Token 한도)
+### Chunking (Size·Overlap·Token 한도)
 * 문서의 제목(Heading)·문단·표 구조를 우선 고려해 본문을 나누며, 기준 크기를 초과하는 부분만 Overlap을 두어 추가로 분할합니다.
 * 글자 수와 실제 모델의 토큰 수는 다르므로 토크나이저로 입력 상한을 계산해야 하며, `passage:` 접두어를 붙여 임베딩 텍스트를 구성합니다.
 
-### 5·6교시 · Chunk Validation · Metadata · 검색 조건
+### Chunk Validation · Metadata · 검색 조건
 * 분할된 청크의 원문 일치 여부(Span), 토큰 한도, 전체 본문 포함률(Coverage) 및 중복·누락 오류를 엄격히 검증합니다.
 * 출처·버전·카테고리 등의 메타데이터를 함께 보존하며, 벡터 유사도 검색(Top-k) 수행 전 반드시 메타데이터 조건 필터링을 먼저 적용해야 합니다.
 
-### 7·8교시 · pgvector Indexing · Version Publish · RAG 연결
+### pgvector Indexing · Version Publish · RAG 연결
 * 새 버전의 데이터는 `staging` → `ready`(검증 통과) → `publish`(트랜잭션 전환) 단계를 거쳐 안전하게 배포하고, 실패 시 기존 정상 버전을 유지합니다.
 * 검증이 완료된 데이터만 검색되도록 버전 일관성을 보장하며, 향후 Retriever가 반환할 출처 정보와 ID 매핑 규약을 정의합니다.
