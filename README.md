@@ -19,7 +19,7 @@
   └─▶ (08. Retrieve) Top-k 검색 및 위치 반환
 ```
 
-![중요한 핵심 이미지] https://github.com/dday4881/2026-11-16/blob/main/D-21%20important%20map.png
+![중요한 핵심 이미지] (https://github.com/dday4881/2026-11-16/blob/main/D-21%20important%20map.png)
 
 ---
 
