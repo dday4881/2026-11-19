@@ -7,7 +7,7 @@
 
 ![중요한 핵심 이미지](https://github.com/dday4881/2026-11-16/blob/main/D-21%20important%20map.png)
 
-## 🔄 전체 파이프라인 아키텍처 (Collect ~ Retrieve)
+## 전체 파이프라인 아키텍처 (Collect ~ Retrieve)
 
 ```text
 [Raw File] 
